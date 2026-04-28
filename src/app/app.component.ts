@@ -7,10 +7,11 @@ import { StatsComponent } from './components/stats/stats.component';
 import { SpecialtiesComponent } from './components/specialties/specialties.component';
 import { CtaComponent } from './components/cta/cta.component';
 import { FeaturedClinicsComponent } from './components/featured-clinics/featured-clinics.component';
+import { FooterComponent } from './components/footer/footer.component';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HeaderComponent, HeroComponent, SearchBarComponent, StatsComponent, SpecialtiesComponent, CtaComponent, FeaturedClinicsComponent],
+  imports: [RouterOutlet, HeaderComponent, HeroComponent, SearchBarComponent, StatsComponent, SpecialtiesComponent, CtaComponent, FeaturedClinicsComponent, FooterComponent],
   template: `
     <app-header></app-header>
     <app-hero></app-hero>
@@ -19,6 +20,7 @@ import { FeaturedClinicsComponent } from './components/featured-clinics/featured
     <app-specialties></app-specialties>
     <app-featured-clinics></app-featured-clinics>
     <app-cta></app-cta>
+    <app-footer></app-footer>
     <router-outlet></router-outlet>
   `
 })
