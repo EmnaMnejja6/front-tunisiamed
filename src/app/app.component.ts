@@ -6,16 +6,18 @@ import { SearchBarComponent } from './components/search-bar/search-bar.component
 import { StatsComponent } from './components/stats/stats.component';
 import { SpecialtiesComponent } from './components/specialties/specialties.component';
 import { CtaComponent } from './components/cta/cta.component';
+import { FeaturedClinicsComponent } from './components/featured-clinics/featured-clinics.component';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HeaderComponent, HeroComponent, SearchBarComponent, StatsComponent, SpecialtiesComponent, CtaComponent],
+  imports: [RouterOutlet, HeaderComponent, HeroComponent, SearchBarComponent, StatsComponent, SpecialtiesComponent, CtaComponent, FeaturedClinicsComponent],
   template: `
     <app-header></app-header>
     <app-hero></app-hero>
     <app-search-bar></app-search-bar>
     <app-stats></app-stats>
     <app-specialties></app-specialties>
+    <app-featured-clinics></app-featured-clinics>
     <app-cta></app-cta>
     <router-outlet></router-outlet>
   `

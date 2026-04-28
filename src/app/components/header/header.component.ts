@@ -13,8 +13,5 @@ export class HeaderComponent {
     { label: 'Home', link: '#' },
     { label: 'Clinics', link: '#' },
     { label: 'Request a Quote', link: '#' },
-    { label: 'Patient', link: '#' },
-    { label: 'Clinic Panel', link: '#' },
-    { label: 'Admin', link: '#' }
   ];
 }
