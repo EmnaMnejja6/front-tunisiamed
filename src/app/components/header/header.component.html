@@ -1,11 +1,16 @@
 <header class="bg-white shadow-sm sticky top-0 z-50">
   <div class="max-w-7xl mx-auto px-8 py-4 flex items-center justify-between">
     <div class="flex items-center gap-2">
-      <img src="assets/TunisiaMed-no-text-header.png" alt="TunisiaMed Logo" class="h-10">
+      <a routerLink="/">
+        <img src="assets/TunisiaMed-no-text-header.png" alt="TunisiaMed Logo" class="h-10">
+      </a>
     </div>
     
     <nav class="flex gap-8">
-      <a *ngFor="let item of navItems" [href]="item.link" 
+      <a *ngFor="let item of navItems" 
+         [routerLink]="item.link" 
+         routerLinkActive="text-primary"
+         [routerLinkActiveOptions]="{exact: item.link === '/'}"
          class="text-gray-600 hover:text-primary transition-colors text-sm">
         {{ item.label }}
       </a>
