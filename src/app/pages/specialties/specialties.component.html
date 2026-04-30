@@ -1,0 +1,102 @@
+<div class="min-h-screen bg-gray-50">
+  <!-- Page Header -->
+  <div class="bg-white py-16">
+    <div class="max-w-4xl mx-auto px-8 text-center">
+      <h1 class="text-4xl font-bold text-gray-900 mb-4">Browse by Specialty</h1>
+      <p class="text-lg text-gray-600 mb-8">Find the right care for your needs</p>
+      
+      <!-- Search Bar -->
+      <div class="relative max-w-md mx-auto">
+        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+          <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+        </div>
+        <input 
+          type="text" 
+          [(ngModel)]="searchTerm" 
+          (input)="filterSpecialties()"
+          placeholder="Search specialties..."
+          class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+        >
+      </div>
+    </div>
+  </div>
+
+  <!-- Specialties Grid -->
+  <div class="max-w-6xl mx-auto px-8 py-12">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+      <div *ngFor="let specialty of filteredSpecialties" 
+           class="bg-white rounded-lg shadow-sm hover:shadow-lg transition-all duration-300 p-6 text-center cursor-pointer group">
+        
+        <!-- Icon Container -->
+        <div class="flex justify-center mb-4">
+          <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center text-primary group-hover:bg-gray-100 transition-colors">
+            
+            <!-- Dental Icon -->
+            <svg *ngIf="specialty.icon === 'dental'" class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M19.03 2.13a4.75 4.75 0 0 0-5.54 1.55l-.68.91c-.38.5-1.23.5-1.6 0l-.68-.91a4.72 4.72 0 0 0-5.54-1.55 4.7 4.7 0 0 0-2.97 4.39c0 1.72.21 3.44.63 5.12l2.04 8.18A2.88 2.88 0 0 0 7.48 22h.12c1.28 0 2.41-.86 2.76-2.08l1.2-4.2c.12-.42.51-.72.95-.72s.83.29.95.72l1.2 4.2A2.88 2.88 0 0 0 17.42 22c1.41 0 2.6-1.01 2.83-2.4l1.33-7.99c.28-1.67.42-3.38.42-5.08 0-1.95-1.17-3.67-2.97-4.39Z"/>
+            </svg>
+
+            <!-- Eye Icon -->
+            <svg *ngIf="specialty.icon === 'eye'" class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+            </svg>
+
+            <!-- Surgery Icon -->
+            <svg *ngIf="specialty.icon === 'surgery'" class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM7 3V1m0 18v2m8-10h2m-2 0h2m-2 0v2m0-2v-2"/>
+            </svg>
+
+            <!-- Bone Icon -->
+            <svg *ngIf="specialty.icon === 'bone'" class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M19.03 4.97c-.18-.68-.53-1.3-1.03-1.8A3.996 3.996 0 0 0 11.18 6c0 .73.19 1.42.55 2.03l-3.71 3.71c-1.53-.9-3.54-.7-4.85.62-.75.75-1.17 1.76-1.17 2.83s.42 2.07 1.17 2.83c.5.5 1.12.85 1.8 1.03a3.974 3.974 0 0 0 3.86 2.97c1.07 0 2.07-.42 2.83-1.17a4.006 4.006 0 0 0 .62-4.85l3.71-3.71c1.5.89 3.59.65 4.86-.62.75-.75 1.17-1.76 1.17-2.83s-.42-2.07-1.17-2.83c-.5-.5-1.12-.85-1.8-1.03Z"/>
+            </svg>
+
+            <!-- Heart Icon -->
+            <svg *ngIf="specialty.icon === 'heart'" class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+            </svg>
+
+            <!-- Brain Icon for Neurology -->
+            <svg *ngIf="specialty.icon === 'brain'" class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M21.33 12.91c.09-.09.15-.2.19-.32.04-.12.05-.25.03-.37-.02-.12-.07-.24-.15-.34-.08-.1-.18-.18-.29-.24-.11-.06-.23-.09-.35-.1-.12-.01-.25 0-.37.04-.12.04-.23.1-.32.19-.09.09-.16.2-.2.32l-.04.37c.01.12.05.24.11.35.06.11.14.21.24.29.1.08.22.13.34.15.12.02.25.01.37-.03.12-.04.23-.1.32-.19.09-.09.15-.2.19-.32zm-1.54-1.54c-.09.09-.2.15-.32.19-.12.04-.25.05-.37.03-.12-.02-.24-.07-.34-.15-.1-.08-.18-.18-.24-.29-.06-.11-.1-.23-.11-.35l.04-.37c.04-.12.11-.23.2-.32.09-.09.2-.15.32-.19.12-.04.25-.05.37-.04.12.01.24.04.35.1.11.06.21.14.29.24.08.1.13.22.15.34.02.12.01.25-.03.37-.04.12-.1.23-.19.32-.09.09-.2.16-.32.2-.12.04-.25.05-.37.04-.12-.01-.24-.04-.35-.1-.11-.06-.21-.14-.29-.24-.08-.1-.13-.22-.15-.34-.02-.12-.01-.25.03-.37.04-.12.1-.23.19-.32z"/>
+            </svg>
+
+            <!-- Dermatology Icon -->
+            <svg *ngIf="specialty.icon === 'skin'" class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+            </svg>
+
+            <!-- General Medicine Icon -->
+            <svg *ngIf="specialty.icon === 'general'" class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+            </svg>
+
+            <!-- Pediatrics Icon -->
+            <svg *ngIf="specialty.icon === 'pediatrics'" class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+
+          </div>
+        </div>
+
+        <!-- Specialty Info -->
+        <h3 class="text-lg font-semibold text-gray-900 mb-2 group-hover:text-primary transition-colors">
+          {{ specialty.name }}
+        </h3>
+        <p class="text-sm text-gray-500">{{ specialty.clinics }} clinics available</p>
+      </div>
+    </div>
+
+    <!-- No Results Message -->
+    <div *ngIf="filteredSpecialties.length === 0" class="text-center py-12">
+      <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+      </svg>
+      <h3 class="mt-2 text-sm font-medium text-gray-900">No specialties found</h3>
+      <p class="mt-1 text-sm text-gray-500">Try adjusting your search terms.</p>
+    </div>
+  </div>
+</div>

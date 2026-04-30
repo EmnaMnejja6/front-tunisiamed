@@ -11,18 +11,11 @@
          [routerLink]="item.link" 
          routerLinkActive="text-primary"
          [routerLinkActiveOptions]="{exact: item.link === '/'}"
-         class="text-gray-600 hover:text-primary transition-colors text-sm">
+         class="text-gray-600 hover:text-primary transition-colors text-lg">
         {{ item.label }}
       </a>
     </nav>
     
-    <div class="flex gap-4">
-      <button class="text-gray-600 hover:text-primary px-6 py-2 transition-colors text-sm">
-        Sign in
-      </button>
-      <button class="bg-primary hover:bg-primary-dark text-white px-6 py-2 rounded-md transition-colors text-sm font-medium">
-        Get Started
-      </button>
-    </div>
+   
   </div>
 </header>
