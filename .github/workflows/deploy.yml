@@ -27,12 +27,12 @@ jobs:
 
       - name: Build Angular app
         run: npm run build -- --configuration production --base-href "/front-tunisiamed/"
-        
+
       - name: Copy index.html to 404.html
-        run: cp ./dist/<YOUR_APP_NAME>/browser/index.html ./dist/<YOUR_APP_NAME>/browser/404.html
-        
+        run: cp ./dist/front-tunisiamed/index.html ./dist/front-tunisiamed/404.html
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist/front-tunisiamed/browser
+          publish_dir: ./dist/front-tunisiamed
