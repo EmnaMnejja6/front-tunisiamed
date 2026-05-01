@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-clinics',
   standalone: true,
@@ -10,6 +10,7 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './clinics.component.css'
 })
 export class ClinicsComponent {
+  constructor(private router: Router) {}
   searchTerm: string = '';
   
   clinics = [
@@ -84,4 +85,8 @@ export class ClinicsComponent {
       clinic.specialty.toLowerCase().includes(searchLower)
     );
   }
+  navigateToClinic(clinicId: number) {
+  this.router.navigate(['/clinic', clinicId]);
+}
+
 }

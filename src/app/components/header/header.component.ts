@@ -14,6 +14,6 @@ export class HeaderComponent {
     { label: 'Home', link: '/' },
     { label: 'Clinics', link: '/clinics' },
     { label: 'Specialties', link: '/specialties' },
-    { label: 'Request a Quote', link: '#' },
+    { label: 'Request a Quote', link: '/request-quote' },
   ];
 }

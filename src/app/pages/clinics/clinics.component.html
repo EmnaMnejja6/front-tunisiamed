@@ -26,7 +26,7 @@
   <!-- Clinics Grid -->
   <div class="max-w-6xl mx-auto px-8 py-12">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      <div *ngFor="let clinic of filteredClinics" class="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-lg transition-shadow">
+      <div *ngFor="let clinic of filteredClinics" (click)="navigateToClinic(clinic.id)"  class="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-lg transition-shadow cursor-pointer">
         <!-- Clinic Image with Rating -->
         <div class="relative h-48 bg-gray-200">
           <img [src]="clinic.image" [alt]="clinic.name" class="w-full h-full object-cover">
@@ -62,4 +62,5 @@
       </div>
     </div>
   </div>
-</div>
+</div>I see you're working on a task that's optimized for spec sessions. Would you like to start a dedicated spec session for the best experience?
+
