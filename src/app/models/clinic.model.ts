@@ -1,6 +1,8 @@
+import { Specialty }from "./specialty.model";
+import { Doctor } from "./doctor.model";
+
 export interface Clinic {
   id: number;
-  uuid: string;
 
   name: string;
   description: string;
@@ -13,8 +15,12 @@ export interface Clinic {
   email: string;
   rating: number;
 
-  image_url: string;
-  clinic_admin: string;
+  imageUrl: string;
+  clinicAdminId: number;
+  clinicAdminName: string;
 
-  created_at: Date;
+  createdAt: Date;
+  specialties: Specialty[];
+  address: string;
+  doctors: Doctor[];
 }

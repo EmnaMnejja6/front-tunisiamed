@@ -7,6 +7,8 @@ import { Specialty } from '../../models/specialty.model';
 import * as L from 'leaflet';
 import { CommonModule } from '@angular/common';
 import { PlacesService,NearbyPlace } from '../../services/places.service';
+import { ClinicService } from '../../services/clinic.service';
+
 @Component({
   selector: 'app-clinic-detail',
   standalone: true,
@@ -17,9 +19,11 @@ import { PlacesService,NearbyPlace } from '../../services/places.service';
 export class ClinicDetailComponent implements AfterViewInit {
 
   constructor(private route: ActivatedRoute,
-    private placesService: PlacesService
-  ) { }
+    private placesService: PlacesService,
+    private clinicService: ClinicService
 
+  ) { }
+  loading: boolean = false;
   clinic: Clinic | null = null;
   doctors: Doctor[] = [];
   specialties: Specialty[] = [];
@@ -34,87 +38,31 @@ export class ClinicDetailComponent implements AfterViewInit {
   activeTab: string = 'specialties'; // Track active tab
 
 
-
-  ngOnInit() {
-    const id = this.route.snapshot.paramMap.get('id');
-
-    this.clinic = {
-      id: 1,
-      uuid: 'abc-123',
-      name: 'Clinique El Manar',
-      description: 'Sample description',
-      city: 'Tunis',  
-      latitude: 34.758097165006674,
-      longitude: 10.748716648166576,
-      phone: '+216 71 123 456',
-      email: 'contact@cliniqueelmanar.tn',
-      rating: 4.8,
-      image_url: 'https://example.com/image.jpg',
-      clinic_admin: 'Admin Name',
-      created_at: new Date()
-    };
-
-
-    // Add this after your clinic data
-    this.specialties = [
-      { id: 1, label: 'Dental Implants', icon_url: 'dental-implant-icon' },
-      { id: 2, label: 'Teeth Whitening', icon_url: 'whitening-icon' },
-      { id: 3, label: 'Orthodontics', icon_url: 'orthodontics-icon' },
-      { id: 4, label: 'Root Canal Treatment', icon_url: 'root-canal-icon' }
-    ];
-
-    this.doctors = [
-      {
-        id: 1,
-        fname: 'Dr. Ahmed Ben Ali',
-        diploma: 'Dental Surgeon',
-        experience_years: 15,
-        biography: 'Experienced dental surgeon specializing in implants',
-        clinic_id: 1,
-        specialty_id: 1,
-        created_at: new Date(),
-        photo_url: undefined
+ngOnInit() {
+  const id = this.route.snapshot.paramMap.get('id');
+  
+  if (id) {
+    this.loading = true;
+    this.clinicService.getClinicById(+id).subscribe({
+      next: (data) => {
+        this.clinic = data;
+        this.specialties = data.specialties;
+        this.doctors = data.doctors;
+        this.loading = false;
+        
+        // Initialize map after clinic data is loaded
+        setTimeout(() => {
+          this.initializeMap();
+          this.loadNearbyPlaces();
+        }, 100);
       },
-      {
-        id: 2,
-        fname: 'Dr. Salma Gharbi',
-        diploma: 'Orthodontist',
-        experience_years: 12,
-        biography: 'Expert in orthodontic treatments and braces',
-        clinic_id: 1,
-        specialty_id: 3,
-        created_at: new Date(),
-        photo_url: undefined
-      },
-      {
-        id: 3,
-        fname: 'Dr. Karim Bouazizi',
-        diploma: 'Periodontist',
-        experience_years: 10,
-        biography: 'Specialist in gum disease treatment',
-        clinic_id: 1,
-        specialty_id: 4,
-        created_at: new Date(),
-        photo_url: undefined
+      error: (error) => {
+        console.error('Error fetching clinic:', error);
+        this.loading = false;
       }
-    ];
-
-    this.reviews = [
-      {
-        id: 1,
-        clinic_id: 1,
-        rating: 5,
-        created_at: new Date('2024-04-15')
-      },
-      {
-        id: 2,
-        clinic_id: 1,
-        rating: 5,
-        created_at: new Date('2024-04-10')
-      }
-    ];
-
+    });
   }
+}
 
   initializeMap() {
     delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -231,7 +179,6 @@ export class ClinicDetailComponent implements AfterViewInit {
     });
   }
   ngAfterViewInit() {
-    this.initializeMap();
     this.loadNearbyPlaces(); 
   }
 
