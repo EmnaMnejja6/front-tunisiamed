@@ -24,4 +24,16 @@ getClinicById(id: number): Observable<Clinic> {
   return this.http.get<Clinic>(`${this.apiUrl}/${id}`);
 }
 
+getClinicsByAdmin(adminId: number): Observable<Clinic[]> {
+  return this.http.get<Clinic[]>(`${this.apiUrl}/admin/${adminId}`);
+}
+
+addSpecialtyToClinic(clinicId: number, specialtyId: number): Observable<Clinic> {
+  return this.http.post<Clinic>(`${this.apiUrl}/${clinicId}/specialties/${specialtyId}`, {});
+}
+
+removeSpecialtyFromClinic(clinicId: number, specialtyId: number): Observable<void> {
+  return this.http.delete<void>(`${this.apiUrl}/${clinicId}/specialties/${specialtyId}`);
+}
+
 }

@@ -29,7 +29,7 @@ export class AuthService {
     return this.http.post<LoginResponse>(`${this.API_URL}/login`, { email, password })
       .pipe(
         map(response => {
-          if (response.role === 'ADMIN') {
+          if (response.role === 'ADMIN' || response.role === 'CLINIC_ADMIN') {
             localStorage.setItem(this.TOKEN_KEY, response.token);
             localStorage.setItem(this.USER_KEY, JSON.stringify(response));
             return true;
@@ -43,13 +43,28 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem(this.TOKEN_KEY);
     localStorage.removeItem(this.USER_KEY);
-    this.router.navigate(['/admin/login']);
+    const user = this.getUser();
+    if (user?.role === 'CLINIC_ADMIN') {
+      this.router.navigate(['/clinic-admin/login']);
+    } else {
+      this.router.navigate(['/admin/login']);
+    }
   }
 
   isAuthenticated(): boolean {
     const token = localStorage.getItem(this.TOKEN_KEY);
     const user = this.getUser();
-    return !!token && user?.role === 'ADMIN';
+    return !!token && (user?.role === 'ADMIN' || user?.role === 'CLINIC_ADMIN');
+  }
+
+  isAdmin(): boolean {
+    const user = this.getUser();
+    return user?.role === 'ADMIN';
+  }
+
+  isClinicAdmin(): boolean {
+    const user = this.getUser();
+    return user?.role === 'CLINIC_ADMIN';
   }
 
   getToken(): string | null {

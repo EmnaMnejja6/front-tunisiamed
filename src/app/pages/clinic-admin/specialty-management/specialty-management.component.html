@@ -1,0 +1,82 @@
+<div class="space-y-6">
+  <div>
+    <h2 class="text-2xl font-bold text-gray-800">Manage Specialties</h2>
+    <p class="text-gray-600">Add or remove specialties offered by your clinic</p>
+  </div>
+
+  <div *ngIf="isLoading" class="text-center py-12 text-gray-500">
+    Loading specialties...
+  </div>
+
+  <div *ngIf="!isLoading && !clinic" class="text-center py-12 text-gray-500">
+    No clinic assigned to your account
+  </div>
+
+  <div *ngIf="!isLoading && clinic" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- Current Specialties -->
+    <div class="bg-white rounded-lg shadow">
+      <div class="px-6 py-4 border-b border-gray-200">
+        <h3 class="text-lg font-semibold text-gray-800">Current Specialties</h3>
+      </div>
+
+      <div *ngIf="clinicSpecialties.length === 0" class="px-6 py-12 text-center text-gray-500">
+        No specialties added yet
+      </div>
+
+      <div *ngIf="clinicSpecialties.length > 0" class="divide-y divide-gray-200">
+        <div *ngFor="let specialty of clinicSpecialties" class="px-6 py-4 flex items-center justify-between hover:bg-gray-50">
+          <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 bg-cyan-100 rounded-lg flex items-center justify-center">
+              <svg class="w-6 h-6 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div>
+              <p class="text-sm font-medium text-gray-900">{{ specialty.label }}</p>
+              <p class="text-xs text-gray-500">{{ specialty.description }}</p>
+            </div>
+          </div>
+          <button
+            (click)="removeSpecialty(specialty.id)"
+            class="text-red-600 hover:text-red-900 text-sm font-medium"
+          >
+            Remove
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Available Specialties -->
+    <div class="bg-white rounded-lg shadow">
+      <div class="px-6 py-4 border-b border-gray-200">
+        <h3 class="text-lg font-semibold text-gray-800">Available Specialties</h3>
+      </div>
+
+      <div *ngIf="availableSpecialties.length === 0" class="px-6 py-12 text-center text-gray-500">
+        All specialties have been added
+      </div>
+
+      <div *ngIf="availableSpecialties.length > 0" class="divide-y divide-gray-200 max-h-[600px] overflow-y-auto">
+        <div *ngFor="let specialty of availableSpecialties" class="px-6 py-4 flex items-center justify-between hover:bg-gray-50">
+          <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
+              <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+              </svg>
+            </div>
+            <div>
+              <p class="text-sm font-medium text-gray-900">{{ specialty.label }}</p>
+              <p class="text-xs text-gray-500">{{ specialty.description }}</p>
+            </div>
+          </div>
+          <button
+            (click)="addSpecialty(specialty.id)"
+            class="text-cyan-600 hover:text-cyan-900 text-sm font-medium"
+          >
+            Add
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

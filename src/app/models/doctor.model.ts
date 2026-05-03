@@ -1,11 +1,29 @@
 export interface Doctor {
   id: number;
-  fname: string;
-  photo_url?: string;
+  firstName: string;
+  lastName: string;
+  photoUrl?: string;
+  experienceYears: number;
   diploma: string;
-  experience_years: number;
   biography?: string;
-  clinic_id: number;
-  specialty_id: number;
-  created_at: Date;
+  clinicId: number;
+  clinicName?: string;
+  specialtyId?: number;
+  specialty?: {
+    id: number;
+    label: string;
+    description: string;
+    iconUrl?: string;
+  };
+}
+
+export interface CreateDoctorRequest {
+  firstName: string;
+  lastName: string;
+  photoUrl?: string;
+  experienceYears: number;
+  diploma: string;
+  biography?: string;
+  clinicId: number;
+  specialtyId: number;
 }

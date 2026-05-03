@@ -11,6 +11,12 @@ import { ClinicListComponent } from './pages/admin/clinic-list/clinic-list.compo
 import { QuoteListComponent } from './pages/admin/quote-list/quote-list.component';
 import { SpecialtyListComponent } from './pages/admin/specialty-list/specialty-list.component';
 import { ClinicAdminListComponent } from './pages/admin/clinic-admin-list/clinic-admin-list.component';
+import { ClinicAdminLoginComponent } from './pages/clinic-admin/login/login.component';
+import { ClinicAdminLayoutComponent } from './pages/clinic-admin/layout/layout.component';
+import { ClinicAdminDashboardComponent } from './pages/clinic-admin/dashboard/dashboard.component';
+import { DoctorListComponent } from './pages/clinic-admin/doctor-list/doctor-list.component';
+import { SpecialtyManagementComponent } from './pages/clinic-admin/specialty-management/specialty-management.component';
+import { QuoteRequestsComponent } from './pages/clinic-admin/quote-requests/quote-requests.component';
 import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
@@ -32,6 +38,20 @@ export const routes: Routes = [
       { path: 'quotes', component: QuoteListComponent },
       { path: 'specialties', component: SpecialtyListComponent },
       { path: 'clinic-admins', component: ClinicAdminListComponent }
+    ]
+  },
+
+  // Clinic Admin routes
+  { path: 'clinic-admin/login', component: ClinicAdminLoginComponent },
+  {
+    path: 'clinic-admin',
+    component: ClinicAdminLayoutComponent,
+    canActivate: [authGuard],
+    children: [
+      { path: '', component: ClinicAdminDashboardComponent },
+      { path: 'doctors', component: DoctorListComponent },
+      { path: 'specialties', component: SpecialtyManagementComponent },
+      { path: 'quote-requests', component: QuoteRequestsComponent }
     ]
   },
   
