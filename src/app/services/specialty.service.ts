@@ -20,4 +20,19 @@ export class SpecialtyService {
   getSpecialtyById(id: number): Observable<Specialty> {
     return this.http.get<Specialty>(`${this.apiUrl}/${id}`);
   }
+
+  // Create a new specialty
+  createSpecialty(specialty: Omit<Specialty, 'id'>): Observable<Specialty> {
+    return this.http.post<Specialty>(this.apiUrl, specialty);
+  }
+
+  // Update specialty by ID
+  updateSpecialty(id: number, specialty: Omit<Specialty, 'id'>): Observable<Specialty> {
+    return this.http.put<Specialty>(`${this.apiUrl}/${id}`, specialty);
+  }
+
+  // Delete specialty by ID
+  deleteSpecialty(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
 }

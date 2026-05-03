@@ -38,7 +38,7 @@ export class ClinicListComponent implements OnInit {
 
   loadClinics(): void {
     this.isLoading = true;
-    this.http.get<any[]>('http://localhost:8081/api/clinics').subscribe({
+    this.http.get<any[]>('https://back-tunisiamed.onrender.com/api/clinics').subscribe({
       next: (data) => {
         this.clinics = data;
         this.filteredClinics = data;
@@ -64,11 +64,13 @@ export class ClinicListComponent implements OnInit {
 
   openModal(): void {
     this.showModal = true;
+    document.body.style.overflow = 'hidden';
   }
 
   closeModal(): void {
     this.showModal = false;
     this.resetForm();
+    document.body.style.overflow = 'auto';
   }
 
   resetForm(): void {
@@ -94,7 +96,25 @@ export class ClinicListComponent implements OnInit {
       return;
     }
 
-    this.http.post('http://localhost:8081/api/clinics', this.clinicForm).subscribe({
+    // Check if user is authenticated
+    const token = localStorage.getItem('auth_token');
+    const userStr = localStorage.getItem('auth_user');
+    const user = userStr ? JSON.parse(userStr) : null;
+    
+    console.log('Auth token exists:', !!token);
+    console.log('User:', user);
+
+    if (!token || !user) {
+      alert('You are not logged in. Please log in again.');
+      return;
+    }
+
+    if (user.role !== 'ADMIN') {
+      alert('You do not have admin permissions to create clinics.');
+      return;
+    }
+
+    this.http.post('https://back-tunisiamed.onrender.com/api/clinics', this.clinicForm).subscribe({
       next: (response) => {
         console.log('Clinic created:', response);
         this.loadClinics();
@@ -102,14 +122,15 @@ export class ClinicListComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error creating clinic:', error);
-        alert('Failed to create clinic: ' + (error.error?.message || error.message));
+        const errorMsg = error.error?.message || error.message || 'Unknown error';
+        alert(`Failed to create clinic: ${errorMsg}\nStatus: ${error.status}`);
       }
     });
   }
 
   deleteClinic(id: number): void {
     if (confirm('Are you sure you want to delete this clinic?')) {
-      this.http.delete(`http://localhost:8081/api/clinics/${id}`).subscribe({
+      this.http.delete(`https://back-tunisiamed.onrender.com/api/clinics/${id}`).subscribe({
         next: () => {
           this.loadClinics();
         }

@@ -25,8 +25,8 @@ export class QuoteListComponent implements OnInit {
   loadQuotes(): void {
     this.isLoading = true;
     const url = this.selectedStatus
-      ? `http://localhost:8081/api/quote-requests?status=${this.selectedStatus}`
-      : 'http://localhost:8081/api/quote-requests';
+      ? `https://back-tunisiamed.onrender.com/api/quote-requests?status=${this.selectedStatus}`
+      : 'https://back-tunisiamed.onrender.com/api/quote-requests';
 
     this.http.get<any[]>(url).subscribe({
       next: (data) => {
@@ -45,7 +45,7 @@ export class QuoteListComponent implements OnInit {
   }
 
   updateStatus(id: number, status: string): void {
-    this.http.patch(`http://localhost:8081/api/quote-requests/${id}/status?status=${status}`, {}).subscribe({
+    this.http.patch(`https://back-tunisiamed.onrender.com/api/quote-requests/${id}/status?status=${status}`, {}).subscribe({
       next: () => {
         this.loadQuotes();
       }
@@ -54,7 +54,7 @@ export class QuoteListComponent implements OnInit {
 
   closeQuote(id: number): void {
     if (confirm('Are you sure you want to close this quote request?')) {
-      this.http.patch(`http://localhost:8081/api/quote-requests/${id}/close`, {}).subscribe({
+      this.http.patch(`https://back-tunisiamed.onrender.com/api/quote-requests/${id}/close`, {}).subscribe({
         next: () => {
           this.loadQuotes();
         }

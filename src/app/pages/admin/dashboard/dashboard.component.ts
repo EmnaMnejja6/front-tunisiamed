@@ -33,7 +33,7 @@ export class DashboardComponent implements OnInit {
   }
 
   loadDashboardData(): void {
-    this.http.get<any[]>('http://localhost:8081/api/clinics').subscribe({
+    this.http.get<any[]>('https://back-tunisiamed.onrender.com/api/clinics').subscribe({
       next: (clinics) => {
         this.stats.totalClinics = clinics.length;
         this.stats.activeCities = new Set(clinics.map(c => c.city)).size;
@@ -41,7 +41,7 @@ export class DashboardComponent implements OnInit {
       }
     });
 
-    this.http.get<any[]>('http://localhost:8081/api/quote-requests').subscribe({
+    this.http.get<any[]>('https://back-tunisiamed.onrender.com/api/quote-requests').subscribe({
       next: (quotes) => {
         this.stats.totalQuotes = quotes.length;
         this.recentQuotes = quotes.slice(0, 5);
