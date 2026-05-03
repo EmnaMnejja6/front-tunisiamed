@@ -1,17 +1,22 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { QuoteRequestService, CreateQuoteRequest } from '../../services/quote-request.service';
+import { SpecialtyService } from '../../services/specialty.service';
+import { Specialty } from '../../models/specialty.model';
 
 interface PatientInfo {
   firstName: string;
   lastName: string;
   email: string;
   phone: string;
+  country: string;
   dateOfBirth: string;
 }
 
 interface ProcedureInfo {
-  specialty: string;
+  specialtyId: number;
   description: string;
 }
 
@@ -22,40 +27,53 @@ interface ProcedureInfo {
   templateUrl: './request-quote.component.html',
   styleUrl: './request-quote.component.css'
 })
-export class RequestQuoteComponent {
+export class RequestQuoteComponent implements OnInit {
   currentStep = 1;
   totalSteps = 3;
   isDropdownOpen = false;
   searchTerm = '';
+  isSubmitting = false;
+  isLoadingSpecialties = true;
 
   patientInfo: PatientInfo = {
     firstName: '',
     lastName: '',
     email: '',
     phone: '',
+    country: '',
     dateOfBirth: ''
   };
 
   procedureInfo: ProcedureInfo = {
-    specialty: '',
+    specialtyId: 0,
     description: ''
   };
 
-  specialties = [
-    'Cardiology',
-    'Cosmetic Surgery',
-    'Dental Care',
-    'Dermatology', 
-    'Gastroenterology',
-    'Neurology',
-    'Oncology',
-    'Ophthalmology',
-    'Orthopedics',
-    'Pediatrics',
-    'Psychiatry',
-    'Radiology',
-    'Surgery'
-  ];
+  specialties: Specialty[] = [];
+  selectedSpecialtyLabel = '';
+
+  constructor(
+    private quoteRequestService: QuoteRequestService,
+    private specialtyService: SpecialtyService,
+    private router: Router
+  ) {}
+
+  ngOnInit(): void {
+    this.loadSpecialties();
+  }
+
+  loadSpecialties(): void {
+    this.specialtyService.getSpecialties().subscribe({
+      next: (data) => {
+        this.specialties = data;
+        this.isLoadingSpecialties = false;
+      },
+      error: (err) => {
+        console.error('Error loading specialties:', err);
+        this.isLoadingSpecialties = false;
+      }
+    });
+  }
 
   nextStep() {
     if (this.currentStep < this.totalSteps) {
@@ -70,10 +88,34 @@ export class RequestQuoteComponent {
   }
 
   submitQuote() {
-    console.log('Patient Info:', this.patientInfo);
-    console.log('Procedure Info:', this.procedureInfo);
-    // Here you would typically send the data to your backend
-    alert('Quote request submitted successfully!');
+    if (!this.isStepValid() || this.isSubmitting) {
+      return;
+    }
+
+    this.isSubmitting = true;
+
+    const quoteRequest: CreateQuoteRequest = {
+      fname: this.patientInfo.firstName,
+      lname: this.patientInfo.lastName,
+      email: this.patientInfo.email,
+      phone: this.patientInfo.phone,
+      country: this.patientInfo.country,
+      dateofBirth: this.patientInfo.dateOfBirth,
+      description: this.procedureInfo.description,
+      specialtyId: this.procedureInfo.specialtyId
+    };
+
+    this.quoteRequestService.createQuoteRequest(quoteRequest).subscribe({
+      next: (response) => {
+        alert('Quote request submitted successfully! We will contact you soon.');
+        this.router.navigate(['/']);
+      },
+      error: (err) => {
+        console.error('Error submitting quote request:', err);
+        alert('Failed to submit quote request. Please try again.');
+        this.isSubmitting = false;
+      }
+    });
   }
 
   isStepValid(): boolean {
@@ -83,9 +125,10 @@ export class RequestQuoteComponent {
                  this.patientInfo.lastName && 
                  this.patientInfo.email && 
                  this.patientInfo.phone && 
+                 this.patientInfo.country &&
                  this.patientInfo.dateOfBirth);
       case 2:
-        return !!(this.procedureInfo.specialty && this.procedureInfo.description);
+        return !!(this.procedureInfo.specialtyId && this.procedureInfo.description);
       case 3:
         return true;
       default:
@@ -97,8 +140,9 @@ export class RequestQuoteComponent {
     this.isDropdownOpen = !this.isDropdownOpen;
   }
 
-  selectSpecialty(specialty: string) {
-    this.procedureInfo.specialty = specialty;
+  selectSpecialty(specialty: Specialty) {
+    this.procedureInfo.specialtyId = specialty.id;
+    this.selectedSpecialtyLabel = specialty.label;
     this.isDropdownOpen = false;
     this.searchTerm = '';
   }
@@ -108,7 +152,7 @@ export class RequestQuoteComponent {
       return this.specialties;
     }
     return this.specialties.filter(specialty => 
-      specialty.toLowerCase().includes(this.searchTerm.toLowerCase())
+      specialty.label.toLowerCase().includes(this.searchTerm.toLowerCase())
     );
   }
 

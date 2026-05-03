@@ -22,6 +22,17 @@ export interface QuoteRequest {
   };
 }
 
+export interface CreateQuoteRequest {
+  fname: string;
+  lname: string;
+  email: string;
+  phone: string;
+  country: string;
+  dateofBirth: string;
+  description: string;
+  specialtyId: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -38,5 +49,9 @@ export class QuoteRequestService {
 
   getQuoteRequestById(id: number): Observable<QuoteRequest> {
     return this.http.get<QuoteRequest>(`${this.API_URL}/${id}`);
+  }
+
+  createQuoteRequest(request: CreateQuoteRequest): Observable<QuoteRequest> {
+    return this.http.post<QuoteRequest>(this.API_URL, request);
   }
 }

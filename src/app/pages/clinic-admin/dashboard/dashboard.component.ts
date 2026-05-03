@@ -58,6 +58,13 @@ export class ClinicAdminDashboardComponent implements OnInit {
     this.doctorService.getDoctors(this.clinic.id).subscribe({
       next: (doctors) => {
         this.doctors = doctors;
+        console.log('Loaded doctors:', doctors);
+        doctors.forEach(doc => {
+          console.log(`Doctor ${doc.firstName} ${doc.lastName} photoUrl:`, doc.photoUrl);
+          if (doc.photoUrl) {
+            console.log('Full photo URL:', this.getPhotoUrl(doc.photoUrl));
+          }
+        });
       }
     });
   }
@@ -71,4 +78,26 @@ export class ClinicAdminDashboardComponent implements OnInit {
       }
     });
   }
+  readonly BASE_URL = 'https://back-tunisiamed.onrender.com';
+
+getPhotoUrl(photoUrl: string): string {
+  if (!photoUrl) return '';
+  
+  // Check if it's an HTML page (not an image)
+  if (photoUrl.includes('.html') || (!photoUrl.match(/\.(jpg|jpeg|png|gif|webp|svg)$/i) && photoUrl.startsWith('http'))) {
+    return ''; // Return empty to show fallback avatar
+  }
+  
+  // already a full URL
+  if (photoUrl.startsWith('http')) return photoUrl;
+  // relative path — prepend base
+  return `${this.BASE_URL}${photoUrl.startsWith('/') ? '' : '/'}${photoUrl}`;
+}
+
+onImageError(event: Event, doctor: any): void {
+  const img = event.target as HTMLImageElement;
+  console.warn(`Photo failed for Dr ${doctor.firstName} ${doctor.lastName}:`, img.src);
+  doctor._photoFailed = true;
+  img.style.display = 'none';
+}
 }

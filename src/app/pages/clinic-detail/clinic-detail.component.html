@@ -90,8 +90,13 @@
         <h2 class="text-xl font-semibold mb-4">Our Doctors</h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div *ngFor="let doctor of doctors" class="text-center">
-            <div class="w-20 h-20 bg-gray-200 rounded-full mx-auto mb-4 flex items-center justify-center">
-              <svg class="w-10 h-10 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+            <div class="w-20 h-20 bg-gray-200 rounded-full mx-auto mb-4 flex items-center justify-center overflow-hidden">
+              <img *ngIf="doctor.photoUrl && !doctor._photoFailed" 
+                   [src]="doctor.photoUrl" 
+                   [alt]="'Dr ' + doctor.firstName + ' ' + doctor.lastName"
+                   (error)="doctor._photoFailed = true"
+                   class="w-full h-full object-cover">
+              <svg *ngIf="!doctor.photoUrl || doctor._photoFailed" class="w-10 h-10 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd">
                 </path>
               </svg>

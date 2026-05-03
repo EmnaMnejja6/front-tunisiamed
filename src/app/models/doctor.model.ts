@@ -15,6 +15,7 @@ export interface Doctor {
     description: string;
     iconUrl?: string;
   };
+  _photoFailed?: boolean;
 }
 
 export interface CreateDoctorRequest {
