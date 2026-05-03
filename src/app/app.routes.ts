@@ -10,6 +10,7 @@ import { DashboardComponent } from './pages/admin/dashboard/dashboard.component'
 import { ClinicListComponent } from './pages/admin/clinic-list/clinic-list.component';
 import { QuoteListComponent } from './pages/admin/quote-list/quote-list.component';
 import { SpecialtyListComponent } from './pages/admin/specialty-list/specialty-list.component';
+import { ClinicAdminListComponent } from './pages/admin/clinic-admin-list/clinic-admin-list.component';
 import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
@@ -29,7 +30,8 @@ export const routes: Routes = [
       { path: '', component: DashboardComponent },
       { path: 'clinics', component: ClinicListComponent },
       { path: 'quotes', component: QuoteListComponent },
-      { path: 'specialties', component: SpecialtyListComponent }
+      { path: 'specialties', component: SpecialtyListComponent },
+      { path: 'clinic-admins', component: ClinicAdminListComponent }
     ]
   },
   
