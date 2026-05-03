@@ -1,0 +1,219 @@
+<div class="space-y-6">
+  <div class="flex items-center justify-between">
+    <div>
+      <h2 class="text-2xl font-bold text-gray-800">Manage Clinics</h2>
+      <p class="text-gray-600">Register and manage partner clinics</p>
+    </div>
+    <button
+      (click)="openModal()"
+      class="px-4 py-2 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 transition-colors font-medium"
+    >
+      + Add Clinic
+    </button>
+  </div>
+
+  <!-- Search Bar -->
+  <div class="bg-white rounded-lg shadow p-4">
+    <input
+      type="text"
+      [(ngModel)]="searchTerm"
+      (ngModelChange)="filterClinics()"
+      placeholder="Search by name or city..."
+      class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
+    />
+  </div>
+
+  <!-- Clinics Table -->
+  <div class="bg-white rounded-lg shadow overflow-hidden">
+    <div *ngIf="isLoading" class="text-center py-12 text-gray-500">
+      Loading clinics...
+    </div>
+
+    <div *ngIf="!isLoading && filteredClinics.length === 0" class="text-center py-12 text-gray-500">
+      No clinics found
+    </div>
+
+    <div *ngIf="!isLoading && filteredClinics.length > 0" class="overflow-x-auto">
+      <table class="min-w-full">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">City</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rating</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          <tr *ngFor="let clinic of filteredClinics" class="hover:bg-gray-50">
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="flex items-center">
+                <img [src]="clinic.imageUrl || '/assets/clinic-1.jpg'" [alt]="clinic.name" class="w-10 h-10 rounded-lg object-cover mr-3" />
+                <div class="text-sm font-medium text-gray-900">{{ clinic.name }}</div>
+              </div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ clinic.city }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ clinic.email }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ clinic.phone }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="flex items-center">
+                <span class="text-yellow-500">★</span>
+                <span class="text-sm text-gray-600 ml-1">{{ clinic.rating || 'N/A' }}</span>
+              </div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+              {{ clinic.createdAt | date:'short' }}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm">
+              <button
+                (click)="deleteClinic(clinic.id)"
+                class="text-red-600 hover:text-red-900 font-medium"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Add Clinic Modal -->
+<div *ngIf="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+  <div class="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+    <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+      <h3 class="text-lg font-semibold text-gray-800">Add New Clinic</h3>
+      <button (click)="closeModal()" class="text-gray-400 hover:text-gray-600">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <form (ngSubmit)="createClinic()" class="p-6 space-y-4">
+      <div class="grid grid-cols-2 gap-4">
+        <div class="col-span-2">
+          <label class="block text-sm font-medium text-gray-700 mb-1">Name *</label>
+          <input
+            type="text"
+            [(ngModel)]="clinicForm.name"
+            name="name"
+            required
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
+            placeholder="Clinique El-Manar"
+          />
+        </div>
+
+        <div class="col-span-2">
+          <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+          <textarea
+            [(ngModel)]="clinicForm.description"
+            name="description"
+            rows="3"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
+            placeholder="Brief description of the clinic"
+          ></textarea>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">City *</label>
+          <input
+            type="text"
+            [(ngModel)]="clinicForm.city"
+            name="city"
+            required
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
+            placeholder="Tunis"
+          />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+          <input
+            type="tel"
+            [(ngModel)]="clinicForm.phone"
+            name="phone"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
+            placeholder="+216 71 000 000"
+          />
+        </div>
+
+        <div class="col-span-2">
+          <label class="block text-sm font-medium text-gray-700 mb-1">Address</label>
+          <input
+            type="text"
+            [(ngModel)]="clinicForm.address"
+            name="address"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
+            placeholder="Full address"
+          />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Latitude</label>
+          <input
+            type="number"
+            [(ngModel)]="clinicForm.latitude"
+            name="latitude"
+            step="0.000001"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
+            placeholder="36.8065"
+          />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Longitude</label>
+          <input
+            type="number"
+            [(ngModel)]="clinicForm.longitude"
+            name="longitude"
+            step="0.000001"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
+            placeholder="10.1815"
+          />
+        </div>
+
+        <div class="col-span-2">
+          <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+          <input
+            type="email"
+            [(ngModel)]="clinicForm.email"
+            name="email"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
+            placeholder="contact@clinic.tn"
+          />
+        </div>
+
+        <div class="col-span-2">
+          <label class="block text-sm font-medium text-gray-700 mb-1">Image URL</label>
+          <input
+            type="url"
+            [(ngModel)]="clinicForm.imageUrl"
+            name="imageUrl"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
+            placeholder="https://..."
+          />
+        </div>
+      </div>
+
+      <div class="flex justify-end space-x-3 pt-4">
+        <button
+          type="button"
+          (click)="closeModal()"
+          class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          class="px-4 py-2 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 transition-colors"
+        >
+          Create Clinic
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

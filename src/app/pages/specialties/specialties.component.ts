@@ -1,6 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { OnInit } from '@angular/core';
+import { SpecialtyService } from '../../services/specialty.service';
+import { Specialty } from '../../models/specialty.model';
 
 @Component({
   selector: 'app-specialties',
@@ -9,23 +12,12 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './specialties.component.html',
   styleUrl: './specialties.component.css'
 })
-export class SpecialtiesComponent {
+export class SpecialtiesComponent implements OnInit {
+  constructor(private specialtyService: SpecialtyService) { }
   searchTerm: string = '';
-
-  specialties = [
-    { icon: 'dental', name: 'Dental Care', clinics: 24 },
-    { icon: 'eye', name: 'Ophthalmology', clinics: 18 },
-    { icon: 'surgery', name: 'Cosmetic Surgery', clinics: 31 },
-    { icon: 'bone', name: 'Orthopedics', clinics: 15 },
-    { icon: 'heart', name: 'Cardiology', clinics: 12 },
-    { icon: 'brain', name: 'Neurology', clinics: 8 },
-    { icon: 'skin', name: 'Dermatology', clinics: 22 },
-    { icon: 'general', name: 'General Medicine', clinics: 45 },
-    { icon: 'pediatrics', name: 'Pediatrics', clinics: 16 },
-    { icon: 'surgery', name: 'General Surgery', clinics: 19 }
-  ];
-
-  filteredSpecialties = [...this.specialties];
+  specialties: Specialty[] = [];
+  loading: boolean = false;
+  filteredSpecialties: Specialty[] = [];
 
   filterSpecialties() {
     if (!this.searchTerm.trim()) {
@@ -35,7 +27,24 @@ export class SpecialtiesComponent {
 
     const searchLower = this.searchTerm.toLowerCase();
     this.filteredSpecialties = this.specialties.filter(specialty =>
-      specialty.name.toLowerCase().includes(searchLower) 
+      specialty.label.toLowerCase().includes(searchLower) ||
+      specialty.description?.toLowerCase().includes(searchLower)
     );
   }
+
+  ngOnInit() {
+    this.loading = true;
+    this.specialtyService.getSpecialties().subscribe({
+      next: (data) => {
+        this.specialties = data;
+        this.filteredSpecialties = [...data];
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('Error fetching specialties:', error);
+        this.loading = false;
+      }
+    });
+  }
+
 }

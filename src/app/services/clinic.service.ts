@@ -6,7 +6,7 @@ import { Clinic } from '../models/clinic.model';
   providedIn: 'root'
 })
 export class ClinicService {
-  private apiUrl = 'http://localhost:8081/api/clinics';
+  private apiUrl = 'https://back-tunisiamed.onrender.com/api/clinics';
     constructor(private http: HttpClient) {}
 getClinics(): Observable<Clinic[]> {
   return this.http.get<Clinic[]>(this.apiUrl);

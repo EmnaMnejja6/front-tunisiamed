@@ -1,0 +1,147 @@
+<div class="space-y-6">
+  <div>
+    <h2 class="text-2xl font-bold text-gray-800">Admin Overview</h2>
+    <p class="text-gray-600">Manage clinics and monitor quote activity</p>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="bg-white rounded-lg shadow p-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-gray-600">Total Clinics</p>
+          <p class="text-3xl font-bold text-gray-900">{{ stats.totalClinics }}</p>
+        </div>
+        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+          <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow p-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-gray-600">Total Quotes</p>
+          <p class="text-3xl font-bold text-gray-900">{{ stats.totalQuotes }}</p>
+        </div>
+        <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
+          <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow p-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-gray-600">Active Cities</p>
+          <p class="text-3xl font-bold text-gray-900">{{ stats.activeCities }}</p>
+        </div>
+        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+          <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Manage Clinics Section -->
+  <div class="bg-white rounded-lg shadow">
+    <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+      <h3 class="text-lg font-semibold text-gray-800">Manage Clinics</h3>
+      <a
+        routerLink="/admin/clinics"
+        class="px-4 py-2 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 transition-colors text-sm font-medium"
+      >
+        + Add Clinic
+      </a>
+    </div>
+    <div class="p-6">
+      <div *ngIf="isLoading" class="text-center py-8 text-gray-500">
+        Loading...
+      </div>
+      <div *ngIf="!isLoading && recentClinics.length === 0" class="text-center py-8 text-gray-500">
+        No clinics yet
+      </div>
+      <div *ngIf="!isLoading && recentClinics.length > 0" class="space-y-4">
+        <div *ngFor="let clinic of recentClinics" class="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50">
+          <div class="flex items-center space-x-4">
+            <img [src]="clinic.imageUrl || '/assets/clinic-1.jpg'" [alt]="clinic.name" class="w-16 h-16 rounded-lg object-cover" />
+            <div>
+              <h4 class="font-semibold text-gray-900">{{ clinic.name }}</h4>
+              <p class="text-sm text-gray-600">{{ clinic.city }}</p>
+              <div class="flex items-center mt-1">
+                <span class="text-yellow-500">★</span>
+                <span class="text-sm text-gray-600 ml-1">{{ clinic.rating || 'N/A' }}</span>
+              </div>
+            </div>
+          </div>
+          <a
+            routerLink="/admin/clinics"
+            class="px-4 py-2 text-sm font-medium text-cyan-600 hover:bg-cyan-50 rounded-lg transition-colors"
+          >
+            Manage
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Quote Requests -->
+  <div class="bg-white rounded-lg shadow">
+    <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+      <h3 class="text-lg font-semibold text-gray-800">Recent Quote Requests</h3>
+      <a
+        routerLink="/admin/quotes"
+        class="text-sm font-medium text-cyan-600 hover:text-cyan-700"
+      >
+        View All
+      </a>
+    </div>
+    <div class="p-6">
+      <div *ngIf="isLoading" class="text-center py-8 text-gray-500">
+        Loading...
+      </div>
+      <div *ngIf="!isLoading && recentQuotes.length === 0" class="text-center py-8 text-gray-500">
+        No quote requests yet
+      </div>
+      <div *ngIf="!isLoading && recentQuotes.length > 0" class="overflow-x-auto">
+        <table class="min-w-full">
+          <thead>
+            <tr class="border-b border-gray-200">
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Patient</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Specialty</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200">
+            <tr *ngFor="let quote of recentQuotes" class="hover:bg-gray-50">
+              <td class="px-4 py-3 text-sm text-gray-900">QR-{{ quote.id }}</td>
+              <td class="px-4 py-3 text-sm text-gray-900">{{ quote.fname }} {{ quote.lname }}</td>
+              <td class="px-4 py-3 text-sm text-gray-600">{{ quote.specialty?.label || 'N/A' }}</td>
+              <td class="px-4 py-3">
+                <span
+                  class="px-2 py-1 text-xs font-medium rounded-full"
+                  [ngClass]="{
+                    'bg-yellow-100 text-yellow-800': quote.status === 'PENDING',
+                    'bg-blue-100 text-blue-800': quote.status === 'IN_PROGRESS',
+                    'bg-green-100 text-green-800': quote.status === 'COMPLETED',
+                    'bg-gray-100 text-gray-800': quote.status === 'CLOSED'
+                  }"
+                >
+                  {{ quote.status }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
