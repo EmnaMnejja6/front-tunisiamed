@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { SpecialtyService } from '../../services/specialty.service';
 import { Specialty } from '../../models/specialty.model';
 
@@ -13,7 +14,10 @@ import { Specialty } from '../../models/specialty.model';
 export class FeaturedSpecialtiesComponent implements OnInit {
   specialties: Specialty[] = [];
 
-  constructor(private specialtyService: SpecialtyService) {}
+  constructor(
+    private specialtyService: SpecialtyService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.loadSpecialties();
@@ -39,5 +43,11 @@ export class FeaturedSpecialtiesComponent implements OnInit {
     if (lowerLabel.includes('bone') || lowerLabel.includes('orthop')) return 'bone';
     if (lowerLabel.includes('heart') || lowerLabel.includes('cardio')) return 'heart';
     return 'heart'; // default icon
+  }
+
+  navigateToSpecialty(specialty: Specialty): void {
+    this.router.navigate(['/clinics'], { 
+      queryParams: { specialty: specialty.label } 
+    });
   }
 }

@@ -6,7 +6,8 @@
     <div class="grid grid-cols-5 gap-6">
       <div
         *ngFor="let specialty of specialties"
-        class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-6 text-center"
+        (click)="navigateToSpecialty(specialty)"
+        class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-6 text-center cursor-pointer"
       >
         <!-- Icon -->
         <div class="flex justify-center mb-4">

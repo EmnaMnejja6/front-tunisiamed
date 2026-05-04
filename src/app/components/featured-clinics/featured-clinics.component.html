@@ -6,7 +6,7 @@
         <h2 class="text-3xl font-bold text-gray-900 mb-2">Featured Clinics</h2>
         <p class="text-gray-600">Top-rated facilities across Tunisia</p>
       </div>
-      <a href="#" class="text-primary hover:text-primary-dark font-medium flex items-center gap-2">
+      <a (click)="navigateToAllClinics()" class="text-primary hover:text-primary-dark font-medium flex items-center gap-2 cursor-pointer">
         View All
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
@@ -16,7 +16,11 @@
 
     <!-- Clinics Grid -->
     <div class="grid grid-cols-3 gap-8">
-      <div *ngFor="let clinic of clinics" class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow overflow-hidden">
+      <div 
+        *ngFor="let clinic of clinics" 
+        (click)="navigateToClinic(clinic.id)"
+        class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow overflow-hidden cursor-pointer"
+      >
         <!-- Clinic Image -->
         <div class="relative h-48 bg-gray-200">
           <img 

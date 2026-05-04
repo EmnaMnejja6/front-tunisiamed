@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { ClinicService } from '../../services/clinic.service';
 import { Clinic } from '../../models/clinic.model';
 
@@ -13,7 +14,10 @@ import { Clinic } from '../../models/clinic.model';
 export class FeaturedClinicsComponent implements OnInit {
   clinics: Clinic[] = [];
 
-  constructor(private clinicService: ClinicService) {}
+  constructor(
+    private clinicService: ClinicService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.loadFeaturedClinics();
@@ -31,5 +35,13 @@ export class FeaturedClinicsComponent implements OnInit {
         console.error('Error loading featured clinics:', error);
       }
     });
+  }
+
+  navigateToClinic(clinicId: number): void {
+    this.router.navigate(['/clinic', clinicId]);
+  }
+
+  navigateToAllClinics(): void {
+    this.router.navigate(['/clinics']);
   }
 }
