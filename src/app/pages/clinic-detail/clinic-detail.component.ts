@@ -1,5 +1,5 @@
 import { Component, AfterViewInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Clinic } from '../../models/clinic.model';
 import { Doctor } from '../../models/doctor.model';
 import { Review } from '../../models/review.model';
@@ -18,10 +18,11 @@ import { ClinicService } from '../../services/clinic.service';
 })
 export class ClinicDetailComponent implements AfterViewInit {
 
-  constructor(private route: ActivatedRoute,
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
     private placesService: PlacesService,
     private clinicService: ClinicService
-
   ) { }
   loading: boolean = false;
   clinic: Clinic | null = null;
@@ -211,6 +212,17 @@ ngOnInit() {
 
   setActiveTab(tab: string) {
     this.activeTab = tab;
+  }
+
+  requestQuote() {
+    if (this.clinic) {
+      this.router.navigate(['/request-quote'], {
+        queryParams: {
+          clinicId: this.clinic.id,
+          clinicName: this.clinic.name
+        }
+      });
+    }
   }
 
 }

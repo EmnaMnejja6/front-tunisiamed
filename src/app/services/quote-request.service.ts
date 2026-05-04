@@ -31,6 +31,7 @@ export interface CreateQuoteRequest {
   dateofBirth: string;
   description: string;
   specialtyId: number;
+  clinicId?: number;
 }
 
 @Injectable({

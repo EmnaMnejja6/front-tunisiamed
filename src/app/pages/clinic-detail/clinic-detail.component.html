@@ -1,37 +1,50 @@
 <!-- Hero Section -->
-<div class="relative h-96 bg-gradient-to-r from-blue-500 to-cyan-400 overflow-hidden">
-  <div class="absolute inset-0 bg-black bg-opacity-30"></div>
-  <div class="relative z-10 container mx-auto px-4 h-full flex items-center">
+<div class="relative h-96 overflow-hidden">
+  <!-- Clinic Image Background -->
+  <img 
+    [src]="clinic?.imageUrl || 'assets/clinic-1.jpg'" 
+    [alt]="clinic?.name" 
+    class="absolute inset-0 w-full h-full object-cover"
+    (error)="$any($event.target).src='assets/clinic-1.jpg'"
+  >
+  <div class="absolute inset-0 bg-black bg-opacity-40"></div>
+  <div class="relative z-10 container mx-auto px-8 lg:px-16 h-full flex items-center">
     <div class="text-white">
-      <div class="flex items-center mb-2">
-        <span class="bg-blue-600 text-white px-3 py-1 rounded-full text-sm mr-3">
-          Dental Care
+      <div class="flex items-center mb-3 flex-wrap gap-2">
+        <span 
+          *ngFor="let specialty of clinic?.specialties?.slice(0, 3)" 
+          class="bg-cyan-600 text-white px-3 py-1 rounded-full text-sm"
+        >
+          {{ specialty.label }}
         </span>
       </div>
-      <h1 class="text-4xl font-bold mb-2">{{ clinic?.name }}</h1>
-      <div class="flex items-center mb-4">
-        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-          <path fill-rule="evenodd"
-            d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
-            clip-rule="evenodd"></path>
-        </svg>
-        <span>{{ clinic?.city }}</span>
-        <div class="flex items-center ml-4">
+      <h1 class="text-5xl font-bold mb-4">{{ clinic?.name }}</h1>
+      <div class="flex items-center mb-4 flex-wrap gap-4">
+        <div class="flex items-center">
+          <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd"
+              d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
+              clip-rule="evenodd"></path>
+          </svg>
+          <span class="text-lg">{{ clinic?.city }}</span>
+        </div>
+        <div class="flex items-center">
           <svg class="w-5 h-5 text-yellow-400 mr-1" fill="currentColor" viewBox="0 0 20 20">
             <path
               d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
             </path>
           </svg>
-          <span>{{ clinic?.rating }}</span>
+          <span class="text-lg font-semibold">{{ clinic?.rating || 'N/A' }}</span>
         </div>
       </div>
+      <p class="text-lg text-gray-100 max-w-2xl">{{ clinic?.description }}</p>
     </div>
   </div>
 </div>
 
 <!-- Navigation Tabs -->
 <div class="bg-white border-b">
-  <div class="container mx-auto px-4 max-w-7xl">
+  <div class="container mx-auto px-8 lg:px-16 max-w-7xl">
     <nav class="flex space-x-8">
       <button (click)="setActiveTab('specialties')" 
         [class.border-blue-500]="activeTab === 'specialties'"
@@ -62,7 +75,7 @@
 </div>
 
 <!-- Main Content -->
-<div class="container mx-auto px-4 py-8 max-w-7xl">
+<div class="container mx-auto px-8 lg:px-16 py-8 max-w-7xl">
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
     <!-- Left Content -->
@@ -157,20 +170,11 @@
           <div class="flex items-start">
             <svg class="w-5 h-5 text-gray-400 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
-            <div class="text-gray-600">
-              <div>Mon-Sat: 8:00 - 18:00</div>
-            </div>
-          </div>
-          <div class="flex items-start">
-            <svg class="w-5 h-5 text-gray-400 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
             </svg>
-            <span class="text-gray-600">Avenue de la Liberte, Tunis</span>
+            <span class="text-gray-600">{{ clinic?.address }}</span>
           </div>
         </div>
       </div>
@@ -180,6 +184,7 @@
         <h3 class="text-lg font-semibold mb-2">Get Your Free Quote</h3>
         <p class="text-cyan-100 text-sm mb-4">Receive a personalized cost estimate within 24 hours</p>
         <button
+          (click)="requestQuote()"
           class="w-full bg-white text-blue-600 font-medium py-2 px-4 rounded-lg hover:bg-gray-50 transition-colors">
           Request a Quote →
         </button>

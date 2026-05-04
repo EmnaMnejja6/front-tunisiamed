@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { QuoteRequestService, CreateQuoteRequest } from '../../services/quote-request.service';
 import { SpecialtyService } from '../../services/specialty.service';
 import { Specialty } from '../../models/specialty.model';
@@ -51,15 +51,28 @@ export class RequestQuoteComponent implements OnInit {
 
   specialties: Specialty[] = [];
   selectedSpecialtyLabel = '';
+  selectedClinicId: number | null = null;
+  selectedClinicName: string = '';
 
   constructor(
     private quoteRequestService: QuoteRequestService,
     private specialtyService: SpecialtyService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
     this.loadSpecialties();
+    
+    // Get clinic info from query params
+    this.route.queryParams.subscribe(params => {
+      if (params['clinicId']) {
+        this.selectedClinicId = +params['clinicId'];
+      }
+      if (params['clinicName']) {
+        this.selectedClinicName = params['clinicName'];
+      }
+    });
   }
 
   loadSpecialties(): void {
@@ -102,7 +115,8 @@ export class RequestQuoteComponent implements OnInit {
       country: this.patientInfo.country,
       dateofBirth: this.patientInfo.dateOfBirth,
       description: this.procedureInfo.description,
-      specialtyId: this.procedureInfo.specialtyId
+      specialtyId: this.procedureInfo.specialtyId,
+      clinicId: this.selectedClinicId || undefined
     };
 
     this.quoteRequestService.createQuoteRequest(quoteRequest).subscribe({

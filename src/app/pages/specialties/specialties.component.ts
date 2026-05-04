@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { SpecialtyService } from '../../services/specialty.service';
 import { Specialty } from '../../models/specialty.model';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
@@ -16,7 +17,8 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 export class SpecialtiesComponent implements OnInit {
   constructor(
     private specialtyService: SpecialtyService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private router: Router
   ) { }
   searchTerm: string = '';
   specialties: Specialty[] = [];
@@ -94,6 +96,12 @@ getSafeIconSvg(iconName: string | undefined): SafeHtml {
         console.error('Error fetching specialties:', error);
         this.loading = false;
       }
+    });
+  }
+
+  navigateToClinicsBySpecialty(specialty: Specialty) {
+    this.router.navigate(['/clinics'], { 
+      queryParams: { specialty: specialty.label } 
     });
   }
 
