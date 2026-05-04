@@ -13,7 +13,7 @@
           <div class="w-12 h-12 flex items-center justify-center text-primary">
             <!-- Dental Icon -->
             <svg
-              *ngIf="specialty.icon === 'dental'"
+              *ngIf="getIconType(specialty.label) === 'dental'"
               xmlns="http://www.w3.org/2000/svg"
               class="w-10 h-10"
               fill="none"
@@ -27,7 +27,7 @@
 
             <!-- Eye Icon -->
             <svg
-              *ngIf="specialty.icon === 'eye'"
+              *ngIf="getIconType(specialty.label) === 'eye'"
               class="w-10 h-10"
               fill="none"
               stroke="currentColor"
@@ -49,7 +49,7 @@
 
             <!-- Surgery Icon -->
             <svg
-              *ngIf="specialty.icon === 'surgery'"
+              *ngIf="getIconType(specialty.label) === 'surgery'"
               class="w-10 h-10"
               fill="none"
               stroke="currentColor"
@@ -65,7 +65,7 @@
             <!-- Bone Icon -->
 
             <svg
-              *ngIf="specialty.icon === 'bone'"
+              *ngIf="getIconType(specialty.label) === 'bone'"
               class="w-10 h-10"
               xmlns="http://www.w3.org/2000/svg"
               fill="currentColor"
@@ -77,7 +77,7 @@
             </svg>
             <!-- Heart Icon -->
             <svg
-              *ngIf="specialty.icon === 'heart'"
+              *ngIf="getIconType(specialty.label) === 'heart'"
               class="w-10 h-10"
               fill="none"
               stroke="currentColor"
@@ -93,8 +93,8 @@
           </div>
         </div>
 
-        <h3 class="font-semibold text-gray-900 mb-1">{{ specialty.name }}</h3>
-        <p class="text-sm text-gray-500">{{ specialty.clinics }} clinics</p>
+        <h3 class="font-semibold text-gray-900 mb-1">{{ specialty.label }}</h3>
+        <p class="text-sm text-gray-500" *ngIf="specialty.description">{{ specialty.description }}</p>
       </div>
     </div>
   </div>

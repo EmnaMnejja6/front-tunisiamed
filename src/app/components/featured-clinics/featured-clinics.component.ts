@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ClinicService } from '../../services/clinic.service';
+import { Clinic } from '../../models/clinic.model';
 
 @Component({
   selector: 'app-featured-clinics',
@@ -8,34 +10,26 @@ import { CommonModule } from '@angular/common';
   templateUrl: './featured-clinics.component.html',
   styleUrl: './featured-clinics.component.css'
 })
-export class FeaturedClinicsComponent {
-  clinics = [
-    {
-      id: 1,
-      name: 'Clinique El Manar',
-      location: 'Tunis',
-      specialty: 'Dental Care',
-      rating: 4.8,
-      image: 'assets/clinic-1.jpg', // You'll add these images later
-      description: 'Leading dental clinic with state-of-the-art technology and international certifications.'
-    },
-    {
-      id: 2,
-      name: 'Centre Ophtalmologique Carthage',
-      location: 'Carthage',
-      specialty: 'Ophthalmology',
-      rating: 4.9,
-      image: 'assets/clinic-2.jpg',
-      description: 'Premium eye care center specializing in LASIK and cataract surgery.'
-    },
-    {
-      id: 3,
-      name: 'Clinique Esthetique Sousse',
-      location: 'Sousse',
-      specialty: 'Cosmetic Surgery',
-      rating: 4.7,
-      image: 'assets/clinic-3.jpg',
-      description: 'Expert cosmetic and reconstructive surgery with a focus on patient satisfaction.'
-    }
-  ];
+export class FeaturedClinicsComponent implements OnInit {
+  clinics: Clinic[] = [];
+
+  constructor(private clinicService: ClinicService) {}
+
+  ngOnInit(): void {
+    this.loadFeaturedClinics();
+  }
+
+  loadFeaturedClinics(): void {
+    this.clinicService.getClinics().subscribe({
+      next: (data) => {
+        // Sort by rating (highest first) and take top 3
+        this.clinics = data
+          .sort((a, b) => b.rating - a.rating)
+          .slice(0, 3);
+      },
+      error: (error) => {
+        console.error('Error loading featured clinics:', error);
+      }
+    });
+  }
 }
