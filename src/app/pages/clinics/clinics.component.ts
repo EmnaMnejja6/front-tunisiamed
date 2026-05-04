@@ -73,9 +73,10 @@ export class ClinicsComponent implements OnInit {
       }
     });
     
-    // Get specialty from query params
+    // Get query params
     this.route.queryParams.subscribe(params => {
       this.selectedSpecialty = params['specialty'] || '';
+      this.searchTerm = params['location'] || '';
       
       // Load clinics
       this.clinicService.getClinics().subscribe({
