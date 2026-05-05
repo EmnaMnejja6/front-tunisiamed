@@ -476,7 +476,7 @@ Delete specialty by ID.
 Get all quote requests with optional status filter.
 
 **Query Parameters:**
-- `status` (optional): PENDING | IN_PROGRESS | COMPLETED | CLOSED
+- `status` (optional): PENDING | RESPONDED
 
 **Response:**
 ```json
@@ -544,7 +544,7 @@ Submit a new quote request.
 Update quote request status.
 
 **Query Parameters:**
-- `status` (required): PENDING | IN_PROGRESS | COMPLETED | CLOSED
+- `status` (required): PENDING | RESPONDED
 
 **Response:** QuoteRequestDTO
 
@@ -601,29 +601,9 @@ Get quote response by ID.
 ---
 
 ### GET `/api/quote-responses/token/{token}`
-Get all quote offers for a quote request by token (for quote requester to view offers).
+Get quote response by token.
 
-**Response:**
-```json
-[
-  {
-    "id": "number",
-    "estimatedPrice": "decimal",
-    "message": "string",
-    "status": "enum",
-    "createdAt": "datetime",
-    "clinic": {
-      "id": "number",
-      "name": "string",
-      "city": "string",
-      "imageUrl": "string",
-      "rating": "number",
-      "phone": "string",
-      "email": "string"
-    }
-  }
-]
-```
+**Response:** QuoteResponseDTO
 
 ---
 

@@ -26,7 +26,7 @@ jobs:
         run: npm ci
 
       - name: Build Angular app
-        run: npm run build -- --configuration production --base-href "/front-tunisiamed/"
+        run: npm run build -- --configuration production --base-href "/"
 
       - name: Copy index.html to 404.html
         run: cp ./dist/front-tunisiamed/index.html ./dist/front-tunisiamed/404.html

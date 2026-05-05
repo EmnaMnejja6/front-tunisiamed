@@ -27,7 +27,6 @@ export class PlacesService {
       (
         node["tourism"="hotel"](around:${radius},${lat},${lon});
         node["amenity"="pharmacy"](around:${radius},${lat},${lon});
-        node["healthcare"="laboratory"](around:${radius},${lat},${lon});
         node["amenity"="clinic"]["healthcare:speciality"="laboratory"](around:${radius},${lat},${lon});
         node["shop"="supermarket"](around:${radius},${lat},${lon});
       );
@@ -46,7 +45,6 @@ export class PlacesService {
     const places = {
       hotels: [] as NearbyPlace[],
       pharmacies: [] as NearbyPlace[],
-      labs: [] as NearbyPlace[],
       supermarkets: [] as NearbyPlace[]
     };
 
@@ -65,7 +63,6 @@ export class PlacesService {
         places.pharmacies.push(place);
       } else if (element.tags?.healthcare === 'laboratory' || 
                  (element.tags?.amenity === 'clinic' && element.tags?.['healthcare:speciality'] === 'laboratory')) {
-        places.labs.push(place);
       } else if (element.tags?.shop === 'supermarket') {
         places.supermarkets.push(place);
       }

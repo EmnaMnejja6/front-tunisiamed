@@ -55,4 +55,12 @@ export class QuoteRequestService {
   createQuoteRequest(request: CreateQuoteRequest): Observable<QuoteRequest> {
     return this.http.post<QuoteRequest>(this.API_URL, request);
   }
+
+  updateQuoteRequestStatus(id: number, status: string): Observable<QuoteRequest> {
+    return this.http.patch<QuoteRequest>(`${this.API_URL}/${id}/status?status=${status}`, {});
+  }
+
+  deleteQuoteRequest(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.API_URL}/${id}`);
+  }
 }

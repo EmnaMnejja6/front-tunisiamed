@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { QuoteRequestService } from '../../../services/quote-request.service';
 
 @Component({
   selector: 'app-quote-list',
@@ -16,7 +17,10 @@ export class QuoteListComponent implements OnInit {
   isLoading = true;
   selectedStatus = '';
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private quoteRequestService: QuoteRequestService
+  ) {}
 
   ngOnInit(): void {
     this.loadQuotes();
@@ -52,11 +56,16 @@ export class QuoteListComponent implements OnInit {
     });
   }
 
-  closeQuote(id: number): void {
-    if (confirm('Are you sure you want to close this quote request?')) {
-      this.http.patch(`https://back-tunisiamed.onrender.com/api/quote-requests/${id}/close`, {}).subscribe({
+  deleteQuote(id: number): void {
+    if (confirm('Are you sure you want to delete this quote request? This action cannot be undone.')) {
+      this.quoteRequestService.deleteQuoteRequest(id).subscribe({
         next: () => {
+          alert('Quote request deleted successfully');
           this.loadQuotes();
+        },
+        error: (err) => {
+          console.error('Error deleting quote request:', err);
+          alert('Failed to delete quote request. Please try again.');
         }
       });
     }

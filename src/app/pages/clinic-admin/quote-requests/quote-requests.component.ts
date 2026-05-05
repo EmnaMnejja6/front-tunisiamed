@@ -172,9 +172,21 @@ export class QuoteRequestsComponent implements OnInit {
 
     this.quoteResponseService.createResponse(response).subscribe({
       next: () => {
-        alert('Response submitted successfully!');
-        this.closeResponseModal();
-        this.loadQuoteRequests();
+        // Update quote request status to RESPONDED after successful response
+        this.quoteRequestService.updateQuoteRequestStatus(this.selectedRequest.id, 'RESPONDED').subscribe({
+          next: () => {
+            alert('Response submitted successfully!');
+            this.closeResponseModal();
+            this.loadQuoteRequests();
+          },
+          error: (statusErr) => {
+            console.error('Error updating quote request status:', statusErr);
+            // Still show success since the response was created
+            alert('Response submitted successfully!');
+            this.closeResponseModal();
+            this.loadQuoteRequests();
+          }
+        });
       },
       error: (err) => {
         console.error('Error submitting response:', err);
