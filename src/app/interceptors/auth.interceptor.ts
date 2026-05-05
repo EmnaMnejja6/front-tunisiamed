@@ -19,9 +19,6 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
       catchError((error: HttpErrorResponse) => {
         if (error.status === 401) {
           console.error('Auth interceptor: 401 Unauthorized - Token may be expired');
-          // Optionally redirect to login
-          // localStorage.removeItem('auth_token');
-          // router.navigate(['/login']);
         }
         return throwError(() => error);
       })

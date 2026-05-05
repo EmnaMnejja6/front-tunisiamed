@@ -600,6 +600,33 @@ Get quote response by ID.
 
 ---
 
+### GET `/api/quote-responses/token/{token}`
+Get all quote offers for a quote request by token (for quote requester to view offers).
+
+**Response:**
+```json
+[
+  {
+    "id": "number",
+    "estimatedPrice": "decimal",
+    "message": "string",
+    "status": "enum",
+    "createdAt": "datetime",
+    "clinic": {
+      "id": "number",
+      "name": "string",
+      "city": "string",
+      "imageUrl": "string",
+      "rating": "number",
+      "phone": "string",
+      "email": "string"
+    }
+  }
+]
+```
+
+---
+
 ### POST `/api/quote-responses`
 Submit a quote response from a clinic.
 
@@ -687,7 +714,7 @@ Delete a review by ID.
 
 ## Summary
 
-Total Endpoints: **45**
+Total Endpoints: **46**
 
 - Authentication: 4 endpoints
 - Users: 7 endpoints
@@ -695,5 +722,5 @@ Total Endpoints: **45**
 - Doctors: 5 endpoints
 - Specialties: 5 endpoints
 - Quote Requests: 6 endpoints
-- Quote Responses: 6 endpoints
+- Quote Responses: 7 endpoints
 - Reviews: 4 endpoints

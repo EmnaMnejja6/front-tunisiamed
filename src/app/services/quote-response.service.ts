@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { QuoteOffer } from '../models/quote.model';
 
 export interface QuoteResponse {
   id: number;
@@ -40,4 +41,9 @@ export class QuoteResponseService {
   createResponse(response: CreateQuoteResponse): Observable<QuoteResponse> {
     return this.http.post<QuoteResponse>(this.API_URL, response);
   }
+
+  getOffersByToken(token: string): Observable<QuoteOffer[]> {
+  return this.http.get<QuoteOffer[]>(`${this.API_URL}/token/${token}`);
+}
+
 }

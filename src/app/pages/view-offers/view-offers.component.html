@@ -1,0 +1,98 @@
+<div class="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-4xl mx-auto">
+    <!-- Header -->
+    <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center">
+          <svg class="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+        </div>
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900">Your Quote Offers</h1>
+          <p class="text-gray-600">{{ offers.length }} clinic{{ offers.length !== 1 ? 's' : '' }} responded to your request</p>
+        </div>
+      </div>
+      <p class="mt-4 text-sm text-gray-600">
+        Compare the offers below and contact the clinic that fits your needs best. A copy of this page was also sent to your email.
+      </p>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="loading" class="bg-white rounded-lg shadow-sm p-12 text-center">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600 mx-auto"></div>
+      <p class="mt-4 text-gray-600">Loading your offers...</p>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="error && !loading" class="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
+      <svg class="w-12 h-12 text-red-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      <p class="text-red-800 font-medium">{{ error }}</p>
+    </div>
+
+    <!-- Offers List -->
+    <div *ngIf="!loading && !error && offers.length > 0" class="space-y-6">
+      <div *ngFor="let offer of offers" class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
+        <div class="p-6">
+          <!-- Clinic Header -->
+          <div class="flex items-start justify-between mb-4">
+            <div class="flex items-center gap-4">
+              <img 
+                [src]="offer.clinicImageUrl || 'assets/clinic-placeholder.jpg'" 
+                [alt]="offer.clinicName"
+                class="w-16 h-16 rounded-lg object-cover"
+              />
+              <div>
+                <h3 class="text-xl font-semibold text-gray-900">{{ offer.clinicName }}</h3>
+                <p class="text-gray-600 flex items-center gap-1">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                  </svg>
+                  {{ offer.clinicCity }}
+                </p>
+                <div *ngIf="offer.clinicRating" class="flex items-center gap-1 mt-1">
+                  <span class="text-yellow-500">★</span>
+                  <span class="text-sm font-medium">{{ offer.clinicRating }}</span>
+                </div>
+              </div>
+            </div>
+            <div class="text-right">
+              <p class="text-sm text-gray-600">Estimated Price</p>
+              <p class="text-3xl font-bold text-teal-600">${{ offer.estimatedPrice.toLocaleString() }}</p>
+            </div>
+          </div>
+
+          <!-- Offer Message -->
+          <div class="bg-gray-50 rounded-lg p-4 mb-4">
+            <p class="text-gray-700 whitespace-pre-line">{{ offer.message }}</p>
+          </div>
+
+          <!-- Contact Button -->
+          <div class="flex gap-3">
+            <a 
+              [href]="'mailto:' + offer.clinicEmail"
+              class="flex-1 bg-teal-600 text-white px-6 py-3 rounded-lg hover:bg-teal-700 transition-colors text-center font-medium flex items-center justify-center gap-2"
+            >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+              </svg>
+              Contact Clinic
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- No Offers State -->
+    <div *ngIf="!loading && !error && offers.length === 0" class="bg-white rounded-lg shadow-sm p-12 text-center">
+      <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
+      </svg>
+      <h3 class="text-xl font-semibold text-gray-900 mb-2">No offers yet</h3>
+      <p class="text-gray-600">Clinics are reviewing your request. You'll receive an email when offers arrive.</p>
+    </div>
+  </div>
+</div>

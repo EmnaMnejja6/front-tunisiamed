@@ -18,6 +18,7 @@ import { DoctorListComponent } from './pages/clinic-admin/doctor-list/doctor-lis
 import { SpecialtyManagementComponent } from './pages/clinic-admin/specialty-management/specialty-management.component';
 import { QuoteRequestsComponent } from './pages/clinic-admin/quote-requests/quote-requests.component';
 import { authGuard } from './guards/auth.guard';
+import { ViewOffersComponent } from './pages/view-offers/view-offers.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -25,6 +26,8 @@ export const routes: Routes = [
   { path: 'specialties', component: SpecialtiesComponent},
   { path: 'request-quote', component: RequestQuoteComponent },
   { path: 'clinic/:id', component: ClinicDetailComponent },
+  { path: 'view-offers', component: ViewOffersComponent },
+
   
   // Admin routes
   { path: 'admin/login', component: LoginComponent },
